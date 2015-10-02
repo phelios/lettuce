@@ -105,7 +105,11 @@ class Command(BaseCommand):
 
     def create_parser(self, prog_name, subcommand):
         parser = super(Command, self).create_parser(prog_name, subcommand)
-        parser.remove_option('-v')
+
+        # Ensure backward compatibility with Django, removing -v option if conflict found.
+        if parser.has_option('-v'):
+            parser.remove_option('-v')
+
         help_text = ('Verbosity level; 0=no output, 1=only dots, 2=only '
                      'scenario names, 3=normal output, 4=normal output '
                      '(colorful, deprecated)')
